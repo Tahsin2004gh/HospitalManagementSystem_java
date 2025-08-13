@@ -1,0 +1,58 @@
+-- Create database
+CREATE DATABASE hospital_db;
+USE hospital_db;
+
+-- Table: Patients
+CREATE TABLE Patients (
+    patient_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    disease VARCHAR(100)
+);
+
+-- Table: Doctors
+CREATE TABLE Doctors (
+    doctor_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    specialty VARCHAR(100)
+);
+
+-- Table: Appointments
+CREATE TABLE Appointments (
+    appointment_id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT,
+    doctor_id INT,
+    appointment_date DATE,
+    status VARCHAR(20),
+    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id),
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id)
+);
+-- Insert patients
+INSERT INTO Patients (name, age, gender, disease) VALUES
+('Alice Green', 30, 'Female', 'Flu'),
+('John Doe', 45, 'Male', 'Diabetes'),
+('Emma Brown', 25, 'Female', 'Asthma');
+
+-- Insert doctors
+INSERT INTO Doctors (name, specialty) VALUES
+('Dr. Smith', 'General Medicine'),
+('Dr. Taylor', 'Endocrinology'),
+('Dr. Patel', 'Pulmonology');
+
+-- Insert appointments
+INSERT INTO Appointments (patient_id, doctor_id, appointment_date, status) VALUES
+(1, 1, '2025-08-14', 'Scheduled'),
+(2, 2, '2025-08-15', 'Scheduled'),
+(3, 3, '2025-08-13', 'Completed');
+SELECT 
+    a.appointment_id,
+    p.name AS patient_name,
+    d.name AS doctor_name,
+    a.appointment_date,
+    a.status
+FROM Appointments a
+JOIN Patients p ON a.patient_id = p.patient_id
+JOIN Doctors d ON a.doctor_id = d.doctor_id
+WHERE a.appointment_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 7 DAY
+  AND a.status = 'Scheduled';
