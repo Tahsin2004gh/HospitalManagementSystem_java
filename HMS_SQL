@@ -56,3 +56,20 @@ JOIN Patients p ON a.patient_id = p.patient_id
 JOIN Doctors d ON a.doctor_id = d.doctor_id
 WHERE a.appointment_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL 7 DAY
   AND a.status = 'Scheduled';
+SELECT 
+    d.name AS doctor_name,
+    COUNT(a.appointment_id) AS total_appointments
+FROM Doctors d
+LEFT JOIN Appointments a ON d.doctor_id = a.doctor_id
+GROUP BY d.name;
+SELECT 
+    p.name AS patient_name,
+    p.disease,
+    a.appointment_date
+FROM Appointments a
+JOIN Patients p ON a.patient_id = p.patient_id
+JOIN Doctors d ON a.doctor_id = d.doctor_id
+WHERE d.name = 'Dr. Smith';
+UPDATE Appointments
+SET status = 'Completed'
+WHERE appointment_id = 1;
